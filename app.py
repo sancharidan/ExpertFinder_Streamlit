@@ -1,14 +1,12 @@
 import streamlit as st
 import torch
-from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
+from torch.utils.data import (DataLoader, SequentialSampler,
                               TensorDataset)
 import numpy as np
 import pandas as pd
 
 from transformers import BertTokenizer,BertForSequenceClassification
 import os
-import gdown
-import zipfile
 import time
 
 import urllib
@@ -98,6 +96,7 @@ def get_predictions(model, tokenizer, sequences, batch_size):
         logits.append(outputs[0])
     predictions = torch.cat(logits, dim=0)
     predictions = predictions.detach().cpu().numpy()
+    del input_ids_list, input_mask_list, segment_ids_list, all_input_ids, all_input_mask, all_segment_ids, all_data, sampler, dataloader, logits
     return predictions 
     
 def get_experts(model, tokenizer, expertise_area, expert_db, num_experts = 50):
@@ -115,6 +114,7 @@ def get_experts(model, tokenizer, expertise_area, expert_db, num_experts = 50):
      experts1 = experts[np.argsort(-pos)][:num_experts]
      # out = experts1[pos1[0].tolist()]
      # df = pd.DataFrame({'Name':experts1, 'Probability':pos1})
+     del experts, l, pred, m, output, neg, pos
      return experts1,pos1
 
 
@@ -190,10 +190,11 @@ def load_page(state: _SessionState, model, tokenizer):
           # get experts and write to output path
           experts,prob = get_experts(model, tokenizer, QUERY, expert_db, NUM_EXPERTS)
           df = pd.DataFrame({'Name':experts, 'Probability':prob})
+          del experts, prob
           df['Query'] = QUERY
           df = df[['Query','Name','Probability']]
-          print('\nWriting to output file...')
-          df.to_csv('./Output/results.csv',index=False)
+#           print('\nWriting to output file...')
+#           df.to_csv('./Output/results.csv',index=False)
           st.write('Displaying top {} experts in the field of {} from {} school'.format(NUM_EXPERTS,QUERY.upper(),EXPERT_SCHOOL.upper()))
           print('\nStep 1...')
 
