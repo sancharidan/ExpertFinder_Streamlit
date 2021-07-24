@@ -1,4 +1,20 @@
 # ExpertFinder
+
+Steps to deply on Google Cloud Run
+
+- Command to build the application
+```
+gcloud builds submit --tag gcr.io/<ProjectName>/<AppName>  --project=<ProjectName>
+
+```
+- Command to deploy the application
+```
+gcloud run deploy --image gcr.io/<ProjectName>/<AppName> --platform managed  --project=<ProjectName> --allow-unauthenticated
+```
+
+
+_________________________________________________________
+
 Steps to run the app locally:
 ```
 # clone repository
