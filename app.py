@@ -30,18 +30,18 @@ def main():
 
     st.title("SMU Expert Finder")
 
-    state.input = st.text_input("Please enter research area for which you seek experts", key="topic_textbox")
-    state.selectbox = st.selectbox('Please select School from which you wish to retrieve experts for above research area',\
+    text_input = st.text_input("Please enter research area for which you seek experts", key="topic_textbox")
+    selectbox = st.selectbox('Please select School from which you wish to retrieve experts for above research area',\
      ('SCIS', 'Business', 'All'),index = 2, key = 'school_select')
-    state.slider = st.slider('Please choose number of experts you wish to retrieve', 1, 10, key = 'num_experts_slider')
+    slider = st.slider('Please choose number of experts you wish to retrieve', 1, 10, key = 'num_experts_slider')
 
     button_generate = st.button("Find Experts")
 
     if button_generate:
         try:
-          QUERY = state.input
-          EXPERT_SCHOOL = state.selectbox
-          NUM_EXPERTS = state.slider
+          QUERY = text_input
+          EXPERT_SCHOOL = selectbox
+          NUM_EXPERTS = slider
           # get expert database
           print ('\nReading Expert Database...')
           if EXPERT_SCHOOL.lower() == 'scis':
