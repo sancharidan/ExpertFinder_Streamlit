@@ -4,11 +4,11 @@ Steps to deply on Google Cloud Run
 
 - Command to build the application
 ```
-gcloud builds submit --tag gcr.io/expertfinderstreamlit/ExpertFinderStreamlit  --project=expertfinderstreamlit
+gcloud builds submit --tag gcr.io/hybrid-chariot-320806/firstapp  --project=hybrid-chariot-320806
 ```
 - Command to deploy the application
 ```
-gcloud run deploy --image gcr.io/expertfinderstreamlit/ExpertFinderStreamlit --platform managed  --project=expertfinderstreamlit --allow-unauthenticated
+gcloud run deploy --image gcr.io/hybrid-chariot-320806/firstapp --platform managed  --project=hybrid-chariot-320806 --allow-unauthenticated
 ```
 _________________________________________________________
 
