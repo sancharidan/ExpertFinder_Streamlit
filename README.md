@@ -4,15 +4,12 @@ Steps to deply on Google Cloud Run
 
 - Command to build the application
 ```
-gcloud builds submit --tag gcr.io/<ProjectName>/<AppName>  --project=<ProjectName>
-
+gcloud builds submit --tag gcr.io/expertfinderstreamlit/ExpertFinderStreamlit  --project=expertfinderstreamlit
 ```
 - Command to deploy the application
 ```
-gcloud run deploy --image gcr.io/<ProjectName>/<AppName> --platform managed  --project=<ProjectName> --allow-unauthenticated
+gcloud run deploy --image gcr.io/expertfinderstreamlit/ExpertFinderStreamlit --platform managed  --project=expertfinderstreamlit --allow-unauthenticated
 ```
-
-
 _________________________________________________________
 
 Steps to run the app locally:
