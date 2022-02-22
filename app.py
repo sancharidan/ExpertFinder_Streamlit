@@ -16,8 +16,9 @@ from random import randint
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+# non-quantized model - sancharidan/scibet_expertfinder
 @st.cache()
-def load_model(MODEL_PATH = 'sancharidan/scibet_expertfinder'):
+def load_model(MODEL_PATH = 'sancharidan/quantized_expfinder'):
     model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
     tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
     return (model, tokenizer)
