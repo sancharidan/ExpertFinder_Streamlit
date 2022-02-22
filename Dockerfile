@@ -1,5 +1,5 @@
-# Use Python3.8.8
-FROM python:3.8.8
+# Use Python3.7
+FROM python:3.7
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED True
 
