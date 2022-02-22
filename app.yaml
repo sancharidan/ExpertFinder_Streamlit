@@ -1,0 +1,8 @@
+service: default
+runtime: custom
+env: flex
+
+resources:
+  cpu: 8
+  memory_gb: 16
+  disk_size_gb: 50
