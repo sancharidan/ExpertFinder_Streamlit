@@ -18,13 +18,13 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # non-quantized model - sancharidan/scibet_expertfinder
 @st.cache()
-def load_model(MODEL_PATH = 'sancharidan/quantized_expfinder'):
+def load_model(MODEL_PATH = 'sancharidan/scibert_expfinder_SCIS'):
     model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
     tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
     return (model, tokenizer)
 
 def main():
-    st.set_page_config(page_title="SMU Expert Finder", page_icon="🛸")
+    st.set_page_config(page_title="SMU SCIS Expert Finder", page_icon="🛸")
 
     model, tokenizer = load_model()
     # set_seed(42)  # for reproducibility
@@ -32,8 +32,8 @@ def main():
     st.title("SMU Expert Finder")
 
     text_input = st.text_input("Please enter research area for which you seek experts", key="topic_textbox")
-    selectbox = st.selectbox('Please select School from which you wish to retrieve experts for above research area',\
-     ('SCIS', 'Business', 'All'),index = 2, key = 'school_select')
+    # selectbox = st.selectbox('Please select School from which you wish to retrieve experts for above research area',\
+    #  ('SCIS', 'Business', 'All'),index = 2, key = 'school_select')
     slider = st.slider('Please choose number of experts you wish to retrieve', 1, 10, key = 'num_experts_slider')
 
     button_generate = st.button("Find Experts")
@@ -41,30 +41,34 @@ def main():
     if button_generate:
         try:
           QUERY = text_input
-          EXPERT_SCHOOL = selectbox
+        #   EXPERT_SCHOOL = selectbox
           NUM_EXPERTS = slider
           # get expert database
           print ('\nReading Expert Database...')
-          if EXPERT_SCHOOL.lower() == 'scis':
-               expert_db = pd.concat([pd.read_csv('./Data/SIS_Faculty_Data.csv',index_col = False)])
-          elif EXPERT_SCHOOL.lower() == 'business':
-               expert_db = pd.concat([pd.read_csv('./Data/Business_Faculty_Data.csv',index_col = False)])
-          elif EXPERT_SCHOOL.lower() == 'all':
-               expert_db = pd.concat([pd.read_csv('./Data/SIS_Faculty_Data.csv',index_col = False),\
-                              pd.read_csv('./Data/Business_Faculty_Data.csv', index_col = False)])
+          expert_db = pd.read_csv('./Data/SCIS_Updated_0402.csv',index_col=False)
+        #   if EXPERT_SCHOOL.lower() == 'scis':
+        #        expert_db = pd.concat([pd.read_csv('./Data/SIS_Faculty_Data.csv',index_col = False)])
+        #   elif EXPERT_SCHOOL.lower() == 'business':
+        #        expert_db = pd.concat([pd.read_csv('./Data/Business_Faculty_Data.csv',index_col = False)])
+        #   elif EXPERT_SCHOOL.lower() == 'all':
+        #        expert_db = pd.concat([pd.read_csv('./Data/SIS_Faculty_Data.csv',index_col = False),\
+        #                       pd.read_csv('./Data/Business_Faculty_Data.csv', index_col = False)])
 
           # get experts and write to output path
           experts,prob = get_experts(model, tokenizer, QUERY, expert_db, NUM_EXPERTS)
           df = pd.DataFrame({'Name':experts, 'Probability':prob})
           del experts, prob
-          df['Query'] = QUERY
-          df = df[['Query','Name','Probability']]
+        #   df['Query'] = QUERY
+          df = df[['Name','Probability']]
+          df['Probability'] = df['Probability'].apply(lambda p: round(p*100,2))
+          df = df.merge(expert_db, on ='Name', how = 'left')
 #           print('\nWriting to output file...')
 #           df.to_csv('./Output/results.csv',index=False)
-          st.write('Displaying top {} experts in the field of {} from {} school'.format(NUM_EXPERTS,QUERY.upper(),EXPERT_SCHOOL.upper()))
+          st.write('Displaying top {} experts in the field of {}'.format(NUM_EXPERTS,QUERY.upper()))
 
           # df = pd.read_csv('./Output/results.csv',index_col=False)
-          st.dataframe(df)
+        #   st.json(df.to_dict(orient='records'))
+          st.json(df.to_json(orient='records'))
          
         except:
             pass
