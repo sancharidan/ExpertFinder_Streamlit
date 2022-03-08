@@ -24,13 +24,16 @@ def load_model(MODEL_PATH = 'sancharidan/scibert_expfinder_SCIS'):
     return (model, tokenizer)
 
 def main():
-    st.set_page_config(page_title="SMU SCIS Expert Finder", page_icon="🛸")
+    st.set_page_config(layout="wide",page_title="SMU SCIS Expert Finder", page_icon="🛸")
+    # st.set_page_config()
 
     model, tokenizer = load_model()
     # set_seed(42)  # for reproducibility
 
-    st.title("SMU Expert Finder")
-
+    st.title("SMU SCIS Expert Finder")
+    st.write('This webpage helps find experts from the SCIS school at SMU. Just type in a query research topic, \
+        and a list of relevant experts with their confidence scores will be displayed. The model has been developed\
+        by using the transfer learning paradigm of transformer based pre-trained language models.')
     text_input = st.text_input("Please enter research area for which you seek experts", key="topic_textbox")
     # selectbox = st.selectbox('Please select School from which you wish to retrieve experts for above research area',\
     #  ('SCIS', 'Business', 'All'),index = 2, key = 'school_select')
@@ -65,10 +68,11 @@ def main():
 #           print('\nWriting to output file...')
 #           df.to_csv('./Output/results.csv',index=False)
           st.write('Displaying top {} experts in the field of {}'.format(NUM_EXPERTS,QUERY.upper()))
+          df.set_index('Name', inplace=True)
 
           # df = pd.read_csv('./Output/results.csv',index_col=False)
         #   st.json(df.to_dict(orient='records'))
-          st.json(df.to_json(orient='records'))
+          st.json(df.to_json(orient='index'))
          
         except:
             pass
